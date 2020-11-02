@@ -9,7 +9,9 @@
 #include "evenement.h"
 
 
-class MyLog : public Log, public TIME::Agenda {
+class MyLog : public Log {
+private:
+    Agenda evts;
 public:
     void addEvt(const TIME::Date& d, const TIME::Horaire& h, const string& s);
     void displayLog(std::ostream& f) const;
