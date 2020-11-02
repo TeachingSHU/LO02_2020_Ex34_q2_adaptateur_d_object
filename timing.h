@@ -1,9 +1,6 @@
-//
-// Created by lunde on 2020/11/1.
-//
+#ifndef TIMING_H_INCLUDED
+#define TIMING_H_INCLUDED
 
-#ifndef LO02_2020_EX31_TIMING_H
-#define LO02_2020_EX31_TIMING_H
 #include<string>
 #include<cstring>
 #include<iostream>
@@ -17,37 +14,61 @@ namespace TIME
     {
     public:
         int year, month, day;
-        Date(int d, int m, int y): day(d), month(m), year(y){ }
+        Date(int y, int m, int d): year(y), month(m), day(d)
+        {
+//            cout << "Construction of Date" << endl;
+        }
 
         string toString() const
         {
             return std::to_string(year)
-                   + " "
-                   + std::to_string(month)
-                   + " "
-                   + std::to_string(day);
+            + " "
+            + std::to_string(month)
+            + " "
+            + std::to_string(day);
+        }
+
+        bool operator < (const Date & d) const{
+            if(this->month < d.month && this->year < d.year && this->day < d.day) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+
+        bool operator == (const Date & d) const {
+            if(this->month == d.month && this->year == d.year && this->day == d.day) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        ~Date()
+        {
+//            std::cout << "Deconstruciton of Date" << std::endl;
         }
     };
-
-    inline bool operator<(const Date& d1, const Date& d2) {
-        if(d1.year < d2.year) return true;
-        if(d1.month < d2.month) return true;
-        if(d1.day < d2.day) return true;
-        return false;
-    }
-
-
 
     class Duree
     {
     public:
         int duree;
         Duree(int d): duree(d){
+//            cout << "Construction of Duree" << endl;
         }
 
         string toString() const
         {
             return std::to_string(duree);
+        }
+
+        ~Duree()
+        {
+//            std::cout << "Deconstruciton of Duree" << std::endl;
         }
 
     };
@@ -57,6 +78,7 @@ namespace TIME
     public:
         int hour, minute;
         Horaire(int h, int m):hour(h), minute(m){
+//            cout << "Construction of Horaire" << endl;
         }
 
         string toString() const
@@ -65,13 +87,22 @@ namespace TIME
                    + " "
                    + std::to_string(minute);
         }
-    };
 
-    inline bool operator<(const Horaire& d1, const Horaire& d2) {
-        if(d1.hour < d2.hour) return true;
-        if(d1.minute < d2.minute) return true;
-        return false;
-    }
+
+        bool operator < (const Horaire & h) const{
+            if(this->hour < h.hour && this->minute < h.minute) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        ~Horaire()
+        {
+//            std::cout << "Deconstruciton of Horaire" << std::endl;
+        }
+    };
 
     inline std::ostream & operator<<(std::ostream & F, const Date & d) {
         string s = std::to_string(d.year)
@@ -96,5 +127,8 @@ namespace TIME
         F << s;
         return F;
     }
+
+
 }
-#endif //LO02_2020_EX31_TIMING_H
+
+#endif // TIMING_H_INCLUDED

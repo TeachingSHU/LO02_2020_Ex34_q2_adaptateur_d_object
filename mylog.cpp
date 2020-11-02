@@ -1,21 +1,35 @@
-//
-// Created by lunde on 2020/11/1.
-//
-
-
-#include "myLog.h"
+#include "mylog.h"
 #include "evenement.h"
 
-using namespace TIME;
+//void MyLog::addEvt(const TIME::Date& d, const TIME::Horaire& h,const string& s){
+//    evts<<TIME::Evt1jDur(d,s,h,TIME::Duree(0));
+//}
 
-void MyLog::addEvt(const Date& d, const Horaire& h,const string& s)
-{
+// Avec gestion d'exceptions :
 
-    // Seems that the code is problematic. But the general idea should be OK.
-    evts<<Evt1jDur(d,s,h,Duree(0));
+void MyLog::addEvt(const TIME::Date& d, const TIME::Horaire& h,const string& s){
+    if (evts.begin()!=evts.end()){
+
+        TIME::Agenda::iterator it = evts.end();
+        it--;
+
+        const TIME::Evt1jDur& lastEvent=dynamic_cast<const TIME::Evt1jDur&>(*(it));
+
+        if (d < lastEvent.getDate() || (d == lastEvent.getDate() && h < lastEvent.getHoraire())) {
+            throw LogError("Addition of a posterior event");
+        }
+    }
+
+    evts<<TIME::Evt1jDur(d,s,h,TIME::Duree(0));
 }
-void MyLog::displayLog(std::ostream& f) const
-{
-    for(Agenda::iterator it=Agenda::begin(); it!=Agenda::end(); ++it)
-        f<<(*it).getDate()<<" - "<<dynamic_cast<const Evt1jDur&>(*it).getHoraire()<<":"<<(*it).getDescription()<<"\n";
+
+
+
+void MyLog::displayLog(std::ostream& f) const{
+    for(TIME::Agenda::const_iterator it=evts.cbegin(); it!=evts.cend(); it++) {
+        f<<dynamic_cast<const TIME::Evt1j&>(*it).getDate() << " - "
+         <<dynamic_cast<const TIME::Evt1jDur&>(*it).getHoraire()
+         <<":"<<(*it).getDescription()<<"\n";
+    }
 }
+
